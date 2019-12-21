@@ -68,7 +68,7 @@ class Othero():
                 # import pdb; pdb.set_trace()
                 print(str(self.current_turn) + "'s" + " Turn")
                 print("set a new stone like d,d")
-                new_stone = input() #list(map(int, input().split(',')))
+                new_stone = list(map(int, input().split(',')))
                 try:
                     self._change_state(new_stone)
                 except couldNotChangeTrunException:
