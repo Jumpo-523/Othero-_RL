@@ -87,7 +87,7 @@ class Othero():
             dx = 0
             dy = d
         elif direction == "diag":
-            dx = -1*d
+            dx = d
             dy = d     
         elif direction == "anti-diag":
             dx = d
