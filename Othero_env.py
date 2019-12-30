@@ -12,6 +12,8 @@ class Othero():
         self.current_turn = -1
         self.length_board = N
         self.display()
+    # def __call__(self):
+    #     self.play()
 
     def set_board(self):
         board = np.zeros((8, 8), dtype=int)
@@ -60,7 +62,6 @@ class Othero():
             raise couldNotChangeTrunException("You could not put a new stone at this cell")
         self.current_turn = -1*self.current_turn
         self.state = state
-    
     def play(self):
         
         try:
@@ -68,12 +69,15 @@ class Othero():
                 # import pdb; pdb.set_trace()
                 print(str(self.current_turn) + "'s" + " Turn")
                 print("set a new stone like d,d")
-                new_stone = list(map(int, input().split(',')))
                 try:
+                    new_stone = list(map(int, input().split(',')))
                     self._change_state(new_stone)
                 except couldNotChangeTrunException:
                     print("You could not put a new stone at this cell")
                     pass
+                except ValueError:
+                    print("Your inputs inclued other than numbers(and ',')")
+
                 self.display()
         except KeyboardInterrupt:
             print('interrupted!')
