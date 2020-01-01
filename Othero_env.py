@@ -8,14 +8,14 @@ class couldNotChangeTrunException(Exception):
 class Othero():
     
     def __init__(self, N=8):
-        self.set_board()
+        self.initialize_board()
         self.current_turn = -1
         self.length_board = N
         self.display()
     # def __call__(self):
     #     self.play()
 
-    def set_board(self):
+    def initialize_board(self):
         board = np.zeros((8, 8), dtype=int)
         i = 3
         j = 4
@@ -62,6 +62,7 @@ class Othero():
             raise couldNotChangeTrunException("You could not put a new stone at this cell")
         self.current_turn = -1*self.current_turn
         self.state = state
+
     def play(self):
         
         try:
@@ -82,7 +83,6 @@ class Othero():
         except KeyboardInterrupt:
             print('interrupted!')
 
-
     def set_direction(self, d, direction):
         if direction == "row":
             dx = d
@@ -98,6 +98,10 @@ class Othero():
             dy = -1*d
         return dx, dy 
 
+
+class otheroEnv(Othero):
+
+    pass
 
 
 if __name__ == "__main__":
