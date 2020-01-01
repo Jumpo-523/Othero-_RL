@@ -2,6 +2,13 @@
 import numpy as np
 import time
 
+
+# lexico graphicな報酬関数って設定できるのか？
+
+class agent(object):
+    def __init__(self, player='first' ):
+        self.player = player
+
 class couldNotChangeTrunException(Exception):
     pass
 
@@ -21,19 +28,34 @@ class Othero():
         j = 4
         board[i,i] = board[j,j] = 1
         board[j,i] = board[i,j] = -1
-        self.state = board
+        self.board = board
 
     def display(self):
-        # for i, r_ in enumerate(self.state):
+        # for i, r_ in enumerate(self.board):
         #     print(str(i)+" | "+str(r_))
-        print(self.state)
+        print(self.board)
+    
+    def is_game_end(self):
+        
+        if not np.any(self.board==0):
+            print("the game end")
+            points_1st = (self.board==-1).sum()
+            points_2nd = (self.board==1).sum()
+            winner, rewards = ("first mover!", (points_1st, -1)) if points_1st >= points_2nd
+                                else ("second mover!", (-1, points_2nd))
+            print(f"The winner is {winner}, 1st points: {points_1st} \n  2nd points: {points_2nd}")
+            done = True
+        else:
+            done = False
+            reward = (-1, -1)
+        return done
     
     def _change_state(self, new_stone_loc):
         """change state for each direction"""
         count_reverse = 0
         i, j = new_stone_loc
         opposite = -1* self.current_turn
-        state = np.copy(self.state)
+        state = np.copy(self.board)
         for direction in ["row", "col", "diag", "anti-diag"]:
             for dir_ in [1, -1]:
                 count_reverse = 0
@@ -58,11 +80,10 @@ class Othero():
                     for d in range(1, count_reverse+1):
                         dx, dy = self.set_direction(dir_*d, direction)
                         state[i + dx, j + dy] = self.current_turn 
-        if (self.state - state).sum() == 0:
+        if (self.board - state).sum() == 0:
             raise couldNotChangeTrunException("You could not put a new stone at this cell")
         self.current_turn = -1*self.current_turn
-        self.state = state
-
+        self.board = state
     def play(self):
         
         try:
@@ -73,6 +94,7 @@ class Othero():
                 try:
                     new_stone = list(map(int, input().split(',')))
                     self._change_state(new_stone)
+                    self.is_game_end()
                 except couldNotChangeTrunException:
                     print("You could not put a new stone at this cell")
                     pass
