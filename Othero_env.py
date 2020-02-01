@@ -2,6 +2,8 @@
 import numpy as np
 import time
 
+import gym
+
 
 # lexico graphicな報酬関数って設定できるのか？
 
@@ -15,17 +17,18 @@ class couldNotChangeTrunException(Exception):
 class Othero():
     
     def __init__(self, N=8):
+        self.length_board = N
         self.initialize_board()
         self.current_turn = -1
-        self.length_board = N
         self.display()
     # def __call__(self):
     #     self.play()
 
     def initialize_board(self):
-        board = np.zeros((8, 8), dtype=int)
-        i = 3
-        j = 4
+        n = self.length_board
+        board = np.zeros((n, n), dtype=int)
+        i = n // 2 -1
+        j = i + 1
         board[i,i] = board[j,j] = 1
         board[j,i] = board[i,j] = -1
         self.board = board
@@ -41,7 +44,7 @@ class Othero():
             print("the game end")
             points_1st = (self.board==-1).sum()
             points_2nd = (self.board==1).sum()
-            winner, rewards = ("first mover!", (points_1st, -1)) if points_1st >= points_2nd
+            winner, rewards = ("first mover!", (points_1st, -1)) if points_1st >= points_2nd \
                                 else ("second mover!", (-1, points_2nd))
             print(f"The winner is {winner}, 1st points: {points_1st} \n  2nd points: {points_2nd}")
             done = True
@@ -128,9 +131,9 @@ class otheroEnv(Othero):
 
 if __name__ == "__main__":
     
-    othero = Othero()
+    othero = Othero(4)
     # import pdb; pdb.set_trace()
     # othero._change_state((2,3))
     # othero.display()
     othero.play()
-
+    # gym
